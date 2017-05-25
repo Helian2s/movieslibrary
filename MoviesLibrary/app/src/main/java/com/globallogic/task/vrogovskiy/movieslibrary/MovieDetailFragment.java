@@ -7,9 +7,12 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
-import com.globallogic.task.vrogovskiy.movieslibrary.dummy.DummyContent;
+import com.globallogic.task.vrogovskiy.movieslibrary.model.MovieObject;
+import com.globallogic.task.vrogovskiy.movieslibrary.view.CustomView;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
 /**
  * A fragment representing a single Movie detail screen.
@@ -18,16 +21,10 @@ import com.globallogic.task.vrogovskiy.movieslibrary.dummy.DummyContent;
  * on handsets.
  */
 public class MovieDetailFragment extends Fragment {
-    /**
-     * The fragment argument representing the item ID that this fragment
-     * represents.
-     */
-    public static final String ARG_ITEM_ID = "item_id";
 
-    /**
-     * The dummy content this fragment is presenting.
-     */
-    private DummyContent.DummyItem mItem;
+    public static final String MOVIE_ITEM_EXTRA_NAME = "MOVIE_ITEM_EXTRA_NAME";
+
+    private MovieObject mMovieObjectItem;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -40,16 +37,20 @@ public class MovieDetailFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (getArguments().containsKey(ARG_ITEM_ID)) {
-            // Load the dummy content specified by the fragment
-            // arguments. In a real-world scenario, use a Loader
-            // to load content from a content provider.
-            mItem = DummyContent.ITEM_MAP.get(getArguments().getString(ARG_ITEM_ID));
-
+        DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder()
+                .cacheInMemory(true)
+                .cacheOnDisk(true)
+                .build();
+        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this.getContext())
+                .defaultDisplayImageOptions(defaultOptions)
+                .build();
+        ImageLoader.getInstance().init(config);
+        if (getArguments().containsKey(MOVIE_ITEM_EXTRA_NAME)) {
+            mMovieObjectItem = getArguments().getParcelable(MOVIE_ITEM_EXTRA_NAME);
             Activity activity = this.getActivity();
             CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
             if (appBarLayout != null) {
-                appBarLayout.setTitle(mItem.content);
+                appBarLayout.setTitle(mMovieObjectItem.getTitle());
             }
         }
     }
@@ -57,13 +58,13 @@ public class MovieDetailFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.movie_detail, container, false);
 
-        // Show the dummy content as text in a TextView.
-        if (mItem != null) {
-            ((TextView) rootView.findViewById(R.id.movie_detail)).setText(mItem.details);
+        CustomView customView = (CustomView) inflater.inflate(R.layout.movie_detail, container, false);
+
+        if (mMovieObjectItem != null) {
+            customView.setMovieObject(mMovieObjectItem);
         }
 
-        return rootView;
+        return customView;
     }
 }

@@ -1,9 +1,6 @@
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/movie_detail"
-    style="?android:attr/textAppearanceLarge"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="16dp"
-    android:textIsSelectable="true"
-    tools:context="com.globallogic.task.vrogovskiy.movieslibrary.MovieDetailFragment" />
+<?xml version="1.0" encoding="utf-8"?>
+<com.globallogic.task.vrogovskiy.movieslibrary.view.CustomView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+</com.globallogic.task.vrogovskiy.movieslibrary.view.CustomView>
